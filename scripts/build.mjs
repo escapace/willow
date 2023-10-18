@@ -15,7 +15,7 @@ await mkdir(outdir, { recursive: true })
 
 await build({
   bundle: true,
-  entryPoints: ['src/index.ts'],
+  entryPoints: ['src/index.ts', 'src/cli.ts'],
   external: ['esbuild', ...external],
   splitting: true,
   format: 'esm',
@@ -23,7 +23,7 @@ await build({
   outExtension: { '.js': '.mjs' },
   outbase: path.join(cwd, 'src'),
   outdir,
-  platform: 'neutral',
+  platform: 'node',
   sourcemap: true,
   minifySyntax: true,
   target,
