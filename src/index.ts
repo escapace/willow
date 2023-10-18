@@ -136,5 +136,5 @@ export const willow = async (options: Options = {}) => {
     await fse.remove(outdir)
   }
 
-  return state
+  return await state.promise
 }
