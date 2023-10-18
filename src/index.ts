@@ -1,4 +1,3 @@
-import { deferred } from '@escapace/sequentialize'
 import { safeReadPackageJson } from '@pnpm/read-package-json'
 import archiver from 'archiver'
 import assert from 'assert'
@@ -39,8 +38,9 @@ export const willow = async (options: Options = {}) => {
   const noExternal = options.include ?? []
   const outdir = path.join(temporaryDirectory, uuidv4())
 
-  const state = deferred<undefined>()
   const sourcemap = options.sourcemap === true ? 'linked' : false
+
+  let error: unknown
 
   try {
     const packageJSONPath = path.join(cwd, 'package.json')
@@ -131,10 +131,13 @@ export const willow = async (options: Options = {}) => {
     archive.pipe(output)
     await archive.finalize()
   } catch (e) {
-    state.reject(e)
-  } finally {
-    await fse.remove(outdir)
+    error = e
   }
 
-  return await state.promise
+  await fse.remove(outdir)
+
+  if (error !== undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw error
+  }
 }

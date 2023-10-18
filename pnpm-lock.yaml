@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@escapace/sequentialize':
-    specifier: ^2.1.4
-    version: 2.1.4
   '@pnpm/read-package-json':
     specifier: ^8.0.4
     version: 8.0.4
@@ -572,11 +569,6 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
-
-  /@escapace/sequentialize@2.1.4:
-    resolution: {integrity: sha512-kNQLKKqye25tq87RVD5TRGZfE8N7Uyz+HZLsnKs/QE8fH1OdOn8H58maDXwckyacYCSpgfo09cN2ygzYq2Fkww==, tarball: https://npm.pkg.github.com/download/@escapace/sequentialize/2.1.4/5d793524e486b12050fac782f8980f6a0fe3ddf8}
-    engines: {node: '>= 18.18.0', pnpm: '>= 8.7.6'}
-    dev: false
 
   /@eslint-community/eslint-utils@4.4.0(eslint@8.51.0):
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}

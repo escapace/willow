@@ -11,7 +11,6 @@
   },
   "bugs": "https://github.com/escapace/willow/issues",
   "dependencies": {
-    "@escapace/sequentialize": "^2.1.4",
     "@pnpm/read-package-json": "^8.0.4",
     "archiver": "^6.0.1",
     "builtin-modules": "^3.3.0",
