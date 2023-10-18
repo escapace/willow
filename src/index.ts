@@ -76,6 +76,7 @@ export const willow = async (options: Options = {}) => {
     await fse.remove(outdir)
     await fse.remove(zip)
     await mkdir(outdir, { recursive: true })
+    await mkdir(path.dirname(zip), { recursive: true })
 
     await build({
       bundle: true,
@@ -120,8 +121,8 @@ export const willow = async (options: Options = {}) => {
       zlib: { level: 9 }
     })
 
-    archive.on('error', function (err) {
-      throw err
+    archive.on('error', (error) => {
+      throw error
     })
 
     // await fse.remove(path.join(outdir, 'package.json'))
@@ -129,7 +130,6 @@ export const willow = async (options: Options = {}) => {
     archive.directory(outdir, false)
     archive.pipe(output)
     await archive.finalize()
-    state.resolve()
   } catch (e) {
     state.reject(e)
   } finally {
