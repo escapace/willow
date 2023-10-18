@@ -52,17 +52,21 @@ const { values: options } = parseArgs({
   }
 })
 
-if (options.help === true) {
-  help()
-} else {
-  try {
-    await willow(options)
-  } catch (e) {
-    if (e instanceof Error) {
-      console.error(`${colors.red('Error:')} ${e.message}`)
+const run = async () => {
+  if (options.help === true) {
+    help()
+  } else {
+    try {
+      await willow(options)
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(`${colors.red('Error:')} ${e.message}`)
+        process.exit(1)
+      }
+      console.error('Unknown Error')
       process.exit(1)
     }
-    console.error('Unknown Error')
-    process.exit(1)
   }
 }
+
+void run()
