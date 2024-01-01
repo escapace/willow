@@ -27,7 +27,7 @@
     "@commitlint/cli": "17.8.0",
     "@commitlint/config-conventional": "17.8.0",
     "@ls-lint/ls-lint": "2.2.1",
-    "@types/archiver": "5.3.3",
+    "@types/archiver": "6.0.2",
     "@types/chai": "4.3.8",
     "@types/fs-extra": "11.0.2",
     "@types/lodash-es": "4.17.9",
