@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { safeReadPackageJson } from '@pnpm/read-package-json'
 import archiver from 'archiver'
 import assert from 'assert'
@@ -11,7 +12,6 @@ import { mapValues, pickBy, uniq } from 'lodash-es'
 import path from 'path'
 import semver from 'semver'
 import temporaryDirectory from 'temp-dir'
-import { isString } from 'util'
 import { v4 as uuidv4 } from 'uuid'
 import { prefixChildProcess } from './prefix-child-process'
 
@@ -49,12 +49,16 @@ export const willow = async (options: Options = {}) => {
     assert.ok(packageJSON !== null, `Unable to read '${packageJSONPath}'.`)
 
     const dependencies = packageJSON.dependencies ?? {}
-    const nodeMinVersion = semver.minVersion(NODE_SEMVER)?.version as string
+    const nodeMinVersion = semver.minVersion(NODE_SEMVER)?.version
     const nodeVersion = semver.minVersion(
-      isString(packageJSON.engines?.node)
-        ? semver.validRange(packageJSON.engines?.node) ?? NODE_SEMVER
+      typeof packageJSON.engines?.node === 'string'
+        ? semver.validRange(packageJSON.engines.node) ?? NODE_SEMVER
         : NODE_SEMVER
-    )?.version as string
+    )?.version
+
+    assert.ok(typeof nodeMinVersion === 'string')
+    assert.ok(typeof nodeVersion === 'string')
+
     const external = uniq([
       ...Object.keys(dependencies),
       ...builtinModules,
