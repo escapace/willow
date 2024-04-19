@@ -1,8 +1,8 @@
 import colors from 'chalk'
 import type { ExecaChildProcess } from 'execa'
-import { EOL } from 'os'
+import { EOL } from 'node:os'
 import split from 'split2'
-import { Transform } from 'stream'
+import { Transform } from 'node:stream'
 
 export class PrefixStream extends Transform {
   private readonly _prefix: string
@@ -13,7 +13,6 @@ export class PrefixStream extends Transform {
     this._prefix = prefix
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   _transform(chunk: Buffer, _: string, done: Function) {
     done(null, `${this._prefix}${chunk.toString()}${EOL}`)
   }

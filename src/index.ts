@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { safeReadPackageJson } from '@pnpm/read-package-json'
 import archiver from 'archiver'
-import assert from 'assert'
+import assert from 'node:assert'
 import builtinModules from 'builtin-modules'
 import { build } from 'esbuild'
 import { execa } from 'execa'
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'node:fs'
 import fse from 'fs-extra'
-import { mkdir } from 'fs/promises'
+import { mkdir } from 'node:fs/promises'
 import { mapValues, pickBy, uniq } from 'lodash-es'
-import path from 'path'
+import path from 'node:path'
 import semver from 'semver'
 import temporaryDirectory from 'temp-dir'
 import { v4 as uuidv4 } from 'uuid'
@@ -88,13 +87,13 @@ export const willow = async (options: Options = {}) => {
       external,
       format: 'esm',
       logLevel: 'warning',
+      mainFields: ['module', 'main'],
       minify: true,
-      outExtension: { '.js': '.mjs' },
       outdir,
+      outExtension: { '.js': '.mjs' },
       platform: 'node',
       sourcemap,
       target: `node${nodeVersion}`,
-      mainFields: ['module', 'main'],
       tsconfig
     })
 
@@ -112,7 +111,7 @@ export const willow = async (options: Options = {}) => {
     const instance = execa(
       'npm',
       ['install', '--no-fund', '--no-package-lock', '--omit=dev', '--no-audit'],
-      { cwd: outdir, cleanup: true }
+      { cleanup: true, cwd: outdir }
     )
 
     prefixChildProcess(instance, process.stdout, process.stderr)
@@ -134,14 +133,14 @@ export const willow = async (options: Options = {}) => {
     archive.directory(outdir, false)
     archive.pipe(output)
     await archive.finalize()
-  } catch (e) {
-    error = e
+  } catch (error_) {
+    error = error_
   }
 
   await fse.remove(outdir)
 
   if (error !== undefined) {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw error
   }
 }
