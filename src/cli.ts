@@ -34,20 +34,20 @@ const { values: options } = parseArgs({
     entry: {
       type: 'string'
     },
+    help: {
+      short: 'h',
+      type: 'boolean'
+    },
     include: {
-      type: 'string',
+      multiple: true,
       short: 'i',
-      multiple: true
+      type: 'string'
     },
     sourcemap: {
       type: 'boolean'
     },
     tsconfig: {
       type: 'string'
-    },
-    help: {
-      type: 'boolean',
-      short: 'h'
     }
   }
 })
@@ -58,9 +58,9 @@ const run = async () => {
   } else {
     try {
       await willow(options)
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error(`${colors.red('Error:')} ${e.message}`)
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`${colors.red('Error:')} ${error.message}`)
         process.exit(1)
       }
       console.error('Unknown Error')
