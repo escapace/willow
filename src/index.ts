@@ -26,14 +26,8 @@ export const NODE_SEMVER = '>=18'
 
 export const willow = async (options: Options = {}) => {
   const cwd = options.cwd ?? process.cwd()
-  const tsconfig = path.resolve(
-    cwd,
-    options.tsconfig ?? path.join(cwd, 'tsconfig.json')
-  )
-  const entry = path.resolve(
-    cwd,
-    options.entry ?? path.join(cwd, 'src', 'index.ts')
-  )
+  const tsconfig = path.resolve(cwd, options.tsconfig ?? path.join(cwd, 'tsconfig.json'))
+  const entry = path.resolve(cwd, options.entry ?? path.join(cwd, 'src', 'index.ts'))
   const noExternal = options.include ?? []
   const outdir = path.join(temporaryDirectory, uuidv4())
 
@@ -52,7 +46,7 @@ export const willow = async (options: Options = {}) => {
     const nodeVersion = semver.minVersion(
       typeof packageJSON.engines?.node === 'string'
         ? semver.validRange(packageJSON.engines.node) ?? NODE_SEMVER
-        : NODE_SEMVER
+        : NODE_SEMVER,
     )?.version
 
     assert.ok(typeof nodeMinVersion === 'string')
@@ -62,13 +56,13 @@ export const willow = async (options: Options = {}) => {
       ...Object.keys(dependencies),
       ...builtinModules,
       ...builtinModules.map((value) => `node:${value}`),
-      'node:assert/strict'
+      'node:assert/strict',
     ]).filter((value) => !noExternal.includes(value))
     const zip = path.join(cwd, 'lib', 'lambda.zip')
 
     assert.ok(
       semver.satisfies(nodeVersion, NODE_SEMVER),
-      `Minumum target version is ${nodeMinVersion}.`
+      `Minumum target version is ${nodeMinVersion}.`,
     )
 
     assert.ok(await fse.exists(entry))
@@ -94,24 +88,24 @@ export const willow = async (options: Options = {}) => {
       platform: 'node',
       sourcemap,
       target: `node${nodeVersion}`,
-      tsconfig
+      tsconfig,
     })
 
     await fse.writeJson(path.join(outdir, 'package.json'), {
       dependencies: pickBy(
         mapValues(dependencies, (value) => semver.clean(value)),
-        (_, key) => external.includes(key)
+        (_, key) => external.includes(key),
       ),
       main: 'index.mjs',
       name: packageJSON.name,
       type: 'module',
-      version: packageJSON.version
+      version: packageJSON.version,
     })
 
     const instance = execa(
       'npm',
       ['install', '--no-fund', '--no-package-lock', '--omit=dev', '--no-audit'],
-      { cleanup: true, cwd: outdir }
+      { cleanup: true, cwd: outdir },
     )
 
     prefixChildProcess(instance, process.stdout, process.stderr)
@@ -121,7 +115,7 @@ export const willow = async (options: Options = {}) => {
     const output = createWriteStream(zip)
 
     const archive = archiver('zip', {
-      zlib: { level: 9 }
+      zlib: { level: 9 },
     })
 
     archive.on('error', (error) => {
@@ -140,7 +134,7 @@ export const willow = async (options: Options = {}) => {
   await fse.remove(outdir)
 
   if (error !== undefined) {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    // eslint-disable-next-line typescript/only-throw-error
     throw error
   }
 }
