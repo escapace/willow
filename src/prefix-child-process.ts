@@ -4,7 +4,7 @@ import { EOL } from 'node:os'
 import split from 'split2'
 import { Transform } from 'node:stream'
 
-export class PrefixStream extends Transform {
+class PrefixStream extends Transform {
   private readonly _prefix: string
 
   constructor(prefix: string) {
@@ -19,10 +19,10 @@ export class PrefixStream extends Transform {
 }
 
 export const prefixChildProcess = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line typescript/no-explicit-any
   value: ExecaChildProcess<any>,
   stdout?: NodeJS.Process['stdout'],
-  stderr?: NodeJS.Process['stderr']
+  stderr?: NodeJS.Process['stderr'],
 ) => {
   const icon = '░'
 
