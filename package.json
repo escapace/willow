@@ -7,7 +7,7 @@
     "email": "opensource@escapace.com"
   },
   "bin": {
-    "willow": "./lib/esm/cli.mjs"
+    "willow": "./lib/node/cli.js"
   },
   "bugs": "https://github.com/escapace/willow/issues",
   "dependencies": {
@@ -32,18 +32,20 @@
     "@types/archiver": "6.0.2",
     "@types/fs-extra": "11.0.4",
     "@types/lodash-es": "4.17.12",
+    "@types/node": "20.12.8",
     "@types/semver": "7.5.8",
     "@types/split2": "4.2.3",
     "@types/uuid": "9.0.8",
     "@vitest/coverage-v8": "1.5.2",
     "eslint": "9.1.1",
-    "eslint-config-escapace": "5.0.6",
+    "eslint-config-escapace": "5.0.9",
+    "esroll": "0.1.0",
     "knip": "5.11.0",
     "lefthook": "1.6.10",
     "prettier": "3.2.5",
     "prettier-config-escapace": "1.2.0",
     "syncpack": "12.3.2",
-    "tsup": "8.0.2",
+    "tsx": "4.9.1",
     "typescript": "5.4.5",
     "vitest": "1.5.2"
   },
@@ -54,16 +56,16 @@
   "exports": {
     ".": {
       "types": "./lib/types/index.d.ts",
-      "import": "./lib/esm/index.mjs"
+      "import": "./lib/node/index.js"
     }
   },
   "files": [
-    "lib/esm",
+    "lib/node",
     "lib/types"
   ],
-  "homepage": "https://github.com/escapace/willow",
+  "homepage": "https://github.com/escapace/willow#readme",
   "license": "MPL-2.0",
-  "module": "lib/esm/index.mjs",
+  "module": "./lib/node/index.js",
   "private": false,
   "publishConfig": {
     "access": "public",
@@ -71,7 +73,7 @@
   },
   "repository": "escapace/willow",
   "scripts": {
-    "build": "tsup",
+    "build": "tsx scripts/build.ts",
     "lint": "ls-lint --config .ls-lint.yaml && knip && eslint",
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",
@@ -80,5 +82,5 @@
   },
   "sideEffects": false,
   "type": "module",
-  "types": "lib/types/index.d.ts"
+  "types": "./lib/types/index.d.ts"
 }
