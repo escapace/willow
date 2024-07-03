@@ -1,8 +1,9 @@
 import colors from 'chalk'
-import type { ExecaChildProcess } from 'execa'
+import type { ResultPromise, Options } from 'execa'
 import { EOL } from 'node:os'
-import split from 'split2'
+import process from 'node:process'
 import { Transform } from 'node:stream'
+import split from 'split2'
 
 class PrefixStream extends Transform {
   private readonly _prefix: string
@@ -16,27 +17,29 @@ class PrefixStream extends Transform {
   _transform(chunk: Buffer, _: string, done: Function) {
     done(null, `${this._prefix}${chunk.toString()}${EOL}`)
   }
+
+  // _flush(done: Function) {
+  //   console.log('here')
+  //   done()
+  // }
 }
 
-export const prefixChildProcess = (
-  // eslint-disable-next-line typescript/no-explicit-any
-  value: ExecaChildProcess<any>,
-  stdout?: NodeJS.Process['stdout'],
-  stderr?: NodeJS.Process['stderr'],
+export const prefixChildProcess = <OptionsType extends Options = Options>(
+  value: ResultPromise<OptionsType>,
 ) => {
   const icon = '░'
 
-  if (value.stdout !== null && stdout !== undefined) {
+  if (value.stdout != null) {
     value.stdout
       .pipe(split(/\r?\n/))
       .pipe(new PrefixStream(colors.dim(`${icon} `)))
-      .pipe(stdout)
+      .pipe(process.stdout)
   }
 
-  if (value.stderr !== null && stderr !== undefined) {
+  if (value.stderr !== null) {
     value.stderr
       .pipe(split(/\r?\n/))
       .pipe(new PrefixStream(colors.red(`${icon} `)))
-      .pipe(stderr)
+      .pipe(process.stderr)
   }
 }
