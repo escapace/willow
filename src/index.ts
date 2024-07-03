@@ -108,7 +108,7 @@ export const willow = async (options: Options = {}) => {
       { cleanup: true, cwd: outdir },
     )
 
-    prefixChildProcess(instance, process.stdout, process.stderr)
+    prefixChildProcess(instance)
 
     await instance
 
